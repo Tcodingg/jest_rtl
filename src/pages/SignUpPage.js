@@ -24,8 +24,20 @@ class SignUpPage extends Component {
          email,
          password,
       };
-      axios.post("/api/1.0/users", body);
+      // using axios
+      //axios.post("/api/1.0/users", body);
+
+      //using fetch
+      fetch("/api/1.0/users", {
+         methods: "POST",
+         headers: {
+            "Content-Type": "application/json",
+         },
+         body: JSON.stringify(body),
+      });
    };
+
+   // using fetching
    render() {
       let disabled = true;
       const { password, passwordRepeat } = this.state;
