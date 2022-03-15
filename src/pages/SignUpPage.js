@@ -29,7 +29,7 @@ class SignUpPage extends Component {
 
       //using fetch
       fetch("/api/1.0/users", {
-         methods: "POST",
+         method: "POST",
          headers: {
             "Content-Type": "application/json",
          },
