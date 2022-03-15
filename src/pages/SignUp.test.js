@@ -2,6 +2,8 @@ import SignUpPage from "./SignUpPage";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axios from "axios";
+import { setupServer } from "msw/node";
+import { rest } from "msw";
 
 describe("Sign up page", () => {
    describe("Layout", () => {
@@ -67,6 +69,16 @@ describe("Sign up page", () => {
          expect(signUpBtn).not.toBeDisabled();
       });
       it("sends email, username, and password after the the button is clicked", async () => {
+         let requestBody;
+         const server = setupServer(
+            rest.post("/api/1.0/users", (req, res, ctx) => {
+               requestBody = req.body;
+               return res(ctx.status(200));
+            })
+         );
+
+         server.listen();
+
          render(<SignUpPage />);
          const email = screen.getByLabelText("E-Mail");
          const username = screen.getByLabelText("Username");
@@ -81,6 +93,7 @@ describe("Sign up page", () => {
          });
 
          // MOCKING WITH AXIOS
+
          // const mockFn = jest.fn();
          // axios.post = mockFn;
          // userEvent.click(signUpBtn);

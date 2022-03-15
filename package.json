@@ -37,6 +37,7 @@
     ]
   },
   "devDependencies": {
-    "@types/jest": "^27.4.1"
+    "@types/jest": "^27.4.1",
+    "msw": "^0.39.2"
   }
 }
