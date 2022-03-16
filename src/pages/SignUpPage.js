@@ -7,6 +7,7 @@ class SignUpPage extends Component {
       username: "",
       password: "",
       passwordRepeat: "",
+      apiProgress: false,
    };
 
    handleInput = (event) => {
@@ -24,49 +25,88 @@ class SignUpPage extends Component {
          email,
          password,
       };
+      this.setState({
+         apiProgress: true,
+      });
       // using axios
-      //axios.post("/api/1.0/users", body);
+      axios.post("/api/1.0/users", body);
 
       //using fetch
-      fetch("/api/1.0/users", {
-         method: "POST",
-         headers: {
-            "Content-Type": "application/json",
-         },
-         body: JSON.stringify(body),
-      });
+      // fetch("/api/1.0/users", {
+      //    method: "POST",
+      //    headers: {
+      //       "Content-Type": "application/json",
+      //    },
+      //    body: JSON.stringify(body),
+      // });
    };
 
    // using fetching
    render() {
       let disabled = true;
-      const { password, passwordRepeat } = this.state;
+      const { password, passwordRepeat, apiProgress } = this.state;
       if (password && passwordRepeat) {
          disabled = password !== passwordRepeat;
       }
       return (
-         <div>
-            <form>
-               <h1>Sign Up</h1>
-               <label htmlFor="username">Username</label>
-               <input onChange={this.handleInput} id="username" type="text" />
-               <label htmlFor="email">E-Mail</label>
-               <input onChange={this.handleInput} id="email" type="text" />
-               <label htmlFor="password">Password</label>
-               <input
-                  onChange={this.handleInput}
-                  id="password"
-                  type="password"
-               />
-               <label htmlFor="passwordRepeat">Password Repeat</label>
-               <input
-                  onChange={this.handleInput}
-                  id="passwordRepeat"
-                  type="password"
-               />
-               <button onClick={this.submit} disabled={disabled}>
-                  Sign Up
-               </button>
+         <div className="col-lg-6 offset-lg-3 col-md-8 offset-md-2">
+            <form className="card mt-5">
+               <div className="card-body">
+                  <h1 className="text-center">Sign Up</h1>
+                  <div className="mb-3">
+                     <label htmlFor="username">Username</label>
+                     <input
+                        className="form-control"
+                        onChange={this.handleInput}
+                        id="username"
+                        type="text"
+                     />
+                  </div>
+
+                  <div className="mb-3">
+                     <label htmlFor="email">E-Mail</label>
+                     <input
+                        className="form-control"
+                        onChange={this.handleInput}
+                        id="email"
+                        type="text"
+                     />
+                  </div>
+
+                  <div className="mb-3">
+                     <label htmlFor="password">Password</label>
+                     <input
+                        className="form-control"
+                        onChange={this.handleInput}
+                        id="password"
+                        type="password"
+                     />
+                  </div>
+
+                  <div className="mb-3">
+                     <label htmlFor="passwordRepeat">Password Repeat</label>
+                     <input
+                        className="form-control"
+                        onChange={this.handleInput}
+                        id="passwordRepeat"
+                        type="password"
+                     />
+                  </div>
+                  <div className="text-center">
+                     <button
+                        className="btn btn-primary"
+                        onClick={this.submit}
+                        disabled={disabled || apiProgress}
+                     >
+                        <span
+                           class="spinner-border spinner-border-sm"
+                           role="status"
+                           aria-hidden="true"
+                        ></span>
+                        Sign Up
+                     </button>
+                  </div>
+               </div>
             </form>
          </div>
       );
