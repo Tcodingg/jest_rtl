@@ -1,9 +1,15 @@
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
+import UserPage from "./pages/UserPage";
 
 function App() {
    return (
       <div>
-         <SignUpPage />
+         {window.location.pathname === "/" && <HomePage />}
+         {window.location.pathname === "/login" && <LoginPage />}
+         {window.location.pathname === "/signup" && <SignUpPage />}
+         {window.location.pathname.startsWith("/user/") && <UserPage />}
       </div>
    );
 }
