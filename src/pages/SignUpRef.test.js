@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { getByRole, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import SignUpPage from "./SignUpPage";
 import { setupServer } from "msw/node";
@@ -41,33 +41,20 @@ describe(" interaction", () => {
       await new Promise((resolve) => setTimeout(resolve, 500));
       expect(counter).toBe(1);
    });
-   xit("displays the spinner while the api request in progress", async () => {
+   it("displays the spinner while the api request in progress", async () => {
       // set up the server
-      let requestBody;
-      let counter = 0;
-      const server = setupServer(
-         rest.post("/api/1.0/users", (req, res, ctx) => {
-            counter++;
-            return res(ctx.status(200));
-         })
-      );
-
-      server.listen();
 
       setup();
       userEvent.click(signUpBtn);
-      const spinner = await screen.findByRole("status");
+      const spinner = screen.getByRole("status");
       expect(spinner).toBeInTheDocument();
-
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      expect(counter).toBe(1);
    });
    it("does not display the spinner when there is no api request", () => {
       setup();
       const spinner = screen.queryByRole("status");
       expect(spinner).not.toBeInTheDocument();
    });
-   xit("displays spinner after clicking the submit button", async () => {
+   it("displays spinner after clicking the submit button", async () => {
       setup();
       expect(screen.queryByRole("status")).not.toBeInTheDocument();
 
@@ -75,6 +62,9 @@ describe(" interaction", () => {
 
       const spinner = screen.getByRole("status");
       expect(spinner).toBeInTheDocument();
+      await screen.findByText(
+         "Please check your e-mail to activate your account"
+      );
    });
    it("displays account activation notification after successful sign up request", async () => {
       setup();
@@ -94,7 +84,7 @@ describe(" interaction", () => {
       });
    });
 
-   xit("displays validation message for username", async () => {
+   it("displays validation message for username", async () => {
       server.use(
          rest.post("/api/1.0/users", (req, res, ctx) => {
             counter++;
@@ -111,8 +101,32 @@ describe(" interaction", () => {
       setup();
       userEvent.click(signUpBtn);
       const validationError = await screen.findByText(
-         "Username can not be nul"
+         "Username can not be null"
       );
+      expect(validationError).toBeInTheDocument();
+   });
+   it("hides the spinner and enables the button after response received", async () => {
+      server.use(
+         rest.post("/api/1.0/users", (req, res, ctx) => {
+            counter++;
+            return res(
+               ctx.status(400),
+               ctx.json({
+                  validationErrors: {
+                     username: "Username can not be null",
+                  },
+               })
+            );
+         })
+      );
+      setup();
+      userEvent.click(signUpBtn);
+
+      const validationError = await screen.findByText(
+         "Username can not be null"
+      );
+
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
       expect(validationError).toBeInTheDocument();
    });
 });

@@ -19,7 +19,7 @@ class SignUpPage extends Component {
          [id]: value,
       });
    };
-   submit = (event) => {
+   submit = async (event) => {
       event.preventDefault();
       const { username, email, password } = this.state;
       const body = {
@@ -32,12 +32,12 @@ class SignUpPage extends Component {
       });
       // using axios
       try {
-         axios.post("/api/1.0/users", body);
-         this.setState({ signUpSuccess: true, apiProgress: false });
+         await axios.post("/api/1.0/users", body);
+         this.setState({ signUpSuccess: true });
       } catch (error) {
-         this.setState({ signUpSuccess: false });
+         this.setState({ apiProgress: false });
          if (error.response.status === 400) {
-            this.state({ errors: error.response.data.validationErrors });
+            this.setState({ errors: error.response.data.validationErrors });
          }
       }
 
@@ -87,6 +87,7 @@ class SignUpPage extends Component {
                            id="email"
                            type="text"
                         />
+                        <span>{errors.email}</span>
                      </div>
 
                      <div className="mb-3">
@@ -97,6 +98,7 @@ class SignUpPage extends Component {
                            id="password"
                            type="password"
                         />
+                        <span>{errors.password}</span>
                      </div>
 
                      <div className="mb-3">
@@ -126,6 +128,7 @@ class SignUpPage extends Component {
                   </div>
                </form>
             )}
+
             {signUpSuccess && (
                <p className="alert alert-success mt-3">
                   Please check your e-mail to activate your account

@@ -6,6 +6,12 @@ import UserPage from "./pages/UserPage";
 function App() {
    return (
       <div>
+         <a href="/" title="Home">
+            Home
+         </a>
+         <a href="/signup" title="Sign Up">
+            Sign Up
+         </a>
          {window.location.pathname === "/" && <HomePage />}
          {window.location.pathname === "/login" && <LoginPage />}
          {window.location.pathname === "/signup" && <SignUpPage />}
