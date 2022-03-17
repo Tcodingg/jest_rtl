@@ -62,4 +62,46 @@ describe(" interaction", () => {
       await new Promise((resolve) => setTimeout(resolve, 500));
       expect(counter).toBe(1);
    });
+   it("does not display the spinner when there is no api request", () => {
+      setup();
+      const spinner = screen.queryByRole("status");
+      expect(spinner).not.toBeInTheDocument();
+   });
+   it("displays spinner after clicking the submit button", async () => {
+      // set up the server
+
+      const server = setupServer(
+         rest.post("/api/1.0/users", (req, res, ctx) => {
+            return res(ctx.status(200));
+         })
+      );
+
+      server.listen();
+
+      setup();
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+      userEvent.click(signUpBtn);
+
+      const spinner = screen.getByRole("status");
+      expect(spinner).toBeInTheDocument();
+   });
+   it("displays account activation notification after successful sign up request", async () => {
+      // set up the server
+
+      const server = setupServer(
+         rest.post("/api/1.0/users", (req, res, ctx) => {
+            return res(ctx.status(200));
+         })
+      );
+
+      server.listen();
+
+      setup();
+      let message = "Please check your e-mail to activate your account";
+      expect(screen.queryByText(message)).not.toBeInTheDocument();
+      userEvent.click(signUpBtn);
+      let displayMessage = await screen.findByText(message);
+
+      expect(displayMessage).toBeInTheDocument();
+   });
 });

@@ -98,16 +98,22 @@ class SignUpPage extends Component {
                         onClick={this.submit}
                         disabled={disabled || apiProgress}
                      >
-                        <span
-                           class="spinner-border spinner-border-sm"
-                           role="status"
-                           aria-hidden="true"
-                        ></span>
+                        {apiProgress && (
+                           <span
+                              class="spinner-border spinner-border-sm"
+                              role="status"
+                           ></span>
+                        )}
                         Sign Up
                      </button>
                   </div>
                </div>
             </form>
+            {apiProgress && (
+               <p className="alert alert-success mt-3">
+                  Please check your e-mail to activate your account
+               </p>
+            )}
          </div>
       );
    }
