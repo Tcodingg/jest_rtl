@@ -1,6 +1,6 @@
 import React from "react";
 
-const Input = ({ help, id, label, onChange }) => {
+const Input = ({ help, id, label, onChange, type }) => {
    let inputClass = "form-control";
    if (help) {
       inputClass += " is-invalid";
@@ -14,6 +14,7 @@ const Input = ({ help, id, label, onChange }) => {
             onChange={onChange}
             id={id}
             data-testid="input"
+            type={type || "text"}
          />
          <span className="invalid-feedback">{help}</span>
       </div>

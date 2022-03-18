@@ -90,7 +90,14 @@ describe("interaction", () => {
       });
    });
 
-   it("displays validation message for username", async () => {
+   it.each`
+      field         | message
+      ${"username"} | ${"Username can not be null"}
+      ${"email"}    | ${"Email can not be null"}
+      ${"password"} | ${"Password can not be null"}
+   `("displays $message for $field", async (testFields) => {
+      const field = testFields.field;
+      const message = testFields.message;
       server.use(
          rest.post("/api/1.0/users", (req, res, ctx) => {
             counter++;
@@ -98,7 +105,7 @@ describe("interaction", () => {
                ctx.status(400),
                ctx.json({
                   validationErrors: {
-                     username: "Username can not be null",
+                     [field]: message,
                   },
                })
             );
@@ -106,11 +113,31 @@ describe("interaction", () => {
       );
       setup();
       userEvent.click(signUpBtn);
-      const validationError = await screen.findByText(
-         "Username can not be null"
-      );
+      const validationError = await screen.findByText(message);
       expect(validationError).toBeInTheDocument();
    });
+
+   // it("displays validation message for username", async () => {
+   //    server.use(
+   //       rest.post("/api/1.0/users", (req, res, ctx) => {
+   //          counter++;
+   //          return res(
+   //             ctx.status(400),
+   //             ctx.json({
+   //                validationErrors: {
+   //                   username: "Username can not be null",
+   //                },
+   //             })
+   //          );
+   //       })
+   //    );
+   //    setup();
+   //    userEvent.click(signUpBtn);
+   //    const validationError = await screen.findByText(
+   //       "Username can not be null"
+   //    );
+   //    expect(validationError).toBeInTheDocument();
+   // });
 
    it("hides the spinner and enables the button after response received", async () => {
       //note: if you change your server status, it will be remain for the rest of the test

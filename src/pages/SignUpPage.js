@@ -60,6 +60,9 @@ class SignUpPage extends Component {
       if (password && passwordRepeat) {
          disabled = password !== passwordRepeat;
       }
+
+      let passwordMisMatch =
+         password !== passwordRepeat ? "Mismatch password" : "";
       return (
          <div
             className="col-lg-6 offset-lg-3 col-md-8 offset-md-2"
@@ -75,38 +78,27 @@ class SignUpPage extends Component {
                         onChange={this.handleInput}
                         help={errors.username}
                      />
+                     <Input
+                        id="email"
+                        label="E-Mail"
+                        onChange={this.handleInput}
+                        help={errors.email}
+                     />
+                     <Input
+                        id="password"
+                        label="Password"
+                        onChange={this.handleInput}
+                        help={errors.password}
+                        type="password"
+                     />
+                     <Input
+                        id="passwordRepeat"
+                        label="Password Repeat"
+                        onChange={this.handleInput}
+                        type="password"
+                        help={passwordMisMatch}
+                     />
 
-                     <div className="mb-3">
-                        <label htmlFor="email">E-Mail</label>
-                        <input
-                           className="form-control"
-                           onChange={this.handleInput}
-                           id="email"
-                           type="text"
-                        />
-                        <span>{errors.email}</span>
-                     </div>
-
-                     <div className="mb-3">
-                        <label htmlFor="password">Password</label>
-                        <input
-                           className="form-control"
-                           onChange={this.handleInput}
-                           id="password"
-                           type="password"
-                        />
-                        <span>{errors.password}</span>
-                     </div>
-
-                     <div className="mb-3">
-                        <label htmlFor="passwordRepeat">Password Repeat</label>
-                        <input
-                           className="form-control"
-                           onChange={this.handleInput}
-                           id="passwordRepeat"
-                           type="password"
-                        />
-                     </div>
                      <div className="text-center">
                         <button
                            className="btn btn-primary"
