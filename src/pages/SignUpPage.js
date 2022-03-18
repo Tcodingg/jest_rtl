@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { Component, useState } from "react";
+import Input from "../component/Input";
 
 class SignUpPage extends Component {
    state = {
@@ -68,16 +69,12 @@ class SignUpPage extends Component {
                <form className="card mt-5" data-testid="form-signup">
                   <div className="card-body">
                      <h1 className="text-center">Sign Up</h1>
-                     <div className="mb-3">
-                        <label htmlFor="username">Username</label>
-                        <input
-                           className="form-control"
-                           onChange={this.handleInput}
-                           id="username"
-                           type="text"
-                        />
-                        <span>{errors.username}</span>
-                     </div>
+                     <Input
+                        id="username"
+                        label="Username"
+                        onChange={this.handleInput}
+                        help={errors.username}
+                     />
 
                      <div className="mb-3">
                         <label htmlFor="email">E-Mail</label>

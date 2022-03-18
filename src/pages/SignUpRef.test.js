@@ -5,10 +5,10 @@ import { setupServer } from "msw/node";
 import { rest } from "msw";
 
 // this is a continuation of SignUp.test.js
-describe(" interaction", () => {
+describe("interaction", () => {
    let signUpBtn;
    let requestBody;
-   let counter = 0;
+   let counter;
    const server = setupServer(
       rest.post("/api/1.0/users", (req, res, ctx) => {
          counter++;
@@ -31,6 +31,12 @@ describe(" interaction", () => {
          name: "Sign Up",
       });
    };
+
+   beforeEach(() => {
+      counter = 0;
+
+      server.resetHandlers(); // this resets the server status
+   });
 
    it("disables button when there is an ongoing api call", async () => {
       // set up the server
@@ -105,7 +111,11 @@ describe(" interaction", () => {
       );
       expect(validationError).toBeInTheDocument();
    });
+
    it("hides the spinner and enables the button after response received", async () => {
+      //note: if you change your server status, it will be remain for the rest of the test
+      // to modify the server for a single test set the response to "res.once"
+      // or reset the server.handlers() beforeEach request
       server.use(
          rest.post("/api/1.0/users", (req, res, ctx) => {
             counter++;
